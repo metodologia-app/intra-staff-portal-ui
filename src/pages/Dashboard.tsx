@@ -21,13 +21,22 @@ import {
   Eye,
   CalendarDays,
   Plus,
-  Search
+  Search,
+  Edit,
+  Trash2
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import VacationRequestModal from '@/components/VacationRequestModal';
+import DocumentUploadModal from '@/components/DocumentUploadModal';
+import EventModal from '@/components/EventModal';
 
 const Dashboard = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [isVacationModalOpen, setIsVacationModalOpen] = useState(false);
+  const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -189,7 +198,7 @@ const Dashboard = () => {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <h1 className="text-3xl font-bold text-gray-900">Documentos</h1>
-              <Button>
+              <Button onClick={() => setIsDocumentModalOpen(true)}>
                 <Plus className="w-4 h-4 mr-2" />
                 Subir Documento
               </Button>
@@ -307,6 +316,9 @@ const Dashboard = () => {
                               <Download className="w-4 h-4 mr-1" />
                               Descargar
                             </Button>
+                            <Button variant="outline" size="sm">
+                              <Trash2 className="w-4 h-4" />
+                            </Button>
                           </div>
                         </div>
                       </CardContent>
@@ -315,6 +327,11 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
+
+            <DocumentUploadModal 
+              open={isDocumentModalOpen} 
+              onOpenChange={setIsDocumentModalOpen}
+            />
           </div>
         );
 
@@ -323,7 +340,7 @@ const Dashboard = () => {
           <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
               <h1 className="text-3xl font-bold text-gray-900">Calendario</h1>
-              <Button>
+              <Button onClick={() => setIsEventModalOpen(true)}>
                 <Plus className="w-4 h-4 mr-2" />
                 Nuevo Evento
               </Button>
@@ -367,29 +384,40 @@ const Dashboard = () => {
                         title: "Reunión de Equipo",
                         type: "Reunión", 
                         location: "Sala de Conferencias A",
-                        attendees: 8
+                        attendees: 8,
+                        id: 1
                       },
                       {
                         time: "14:00 - 15:30", 
                         title: "Evaluación de Desempeño",
                         type: "Evaluación",
                         location: "Oficina de RR.HH.",
-                        attendees: 2
+                        attendees: 2,
+                        id: 2
                       },
                       {
                         time: "16:00 - 17:00",
                         title: "Capacitación en Seguridad",
                         type: "Capacitación",
                         location: "Aula Virtual", 
-                        attendees: 25
+                        attendees: 25,
+                        id: 3
                       }
-                    ].map((event, i) => (
-                      <div key={i} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                    ].map((event) => (
+                      <div key={event.id} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
                         <div className="w-2 h-12 bg-blue-600 rounded"></div>
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
                             <h3 className="font-medium text-gray-900">{event.title}</h3>
-                            <Badge variant="outline">{event.type}</Badge>
+                            <div className="flex items-center gap-2">
+                              <Badge variant="outline">{event.type}</Badge>
+                              <Button variant="ghost" size="sm">
+                                <Edit className="w-4 h-4" />
+                              </Button>
+                              <Button variant="ghost" size="sm">
+                                <Trash2 className="w-4 h-4" />
+                              </Button>
+                            </div>
                           </div>
                           <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
                             <span className="flex items-center gap-1">
@@ -419,38 +447,51 @@ const Dashboard = () => {
                         date: "Lun 18 Mar",
                         title: "Presentación de Proyecto",
                         time: "10:00",
-                        type: "Presentación"
+                        type: "Presentación",
+                        id: 4
                       },
                       {
                         date: "Mié 20 Mar", 
                         title: "Día Libre por Cumpleaños",
                         time: "Todo el día",
-                        type: "Libre"
+                        type: "Libre",
+                        id: 5
                       },
                       {
                         date: "Vie 22 Mar",
                         title: "Reunión Mensual",
                         time: "15:00",
-                        type: "Reunión"
+                        type: "Reunión",
+                        id: 6
                       }
-                    ].map((event, i) => (
-                      <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+                    ].map((event) => (
+                      <div key={event.id} className="flex items-center justify-between p-3 border rounded-lg">
                         <div>
                           <h4 className="font-medium">{event.title}</h4>
                           <p className="text-sm text-gray-600">{event.date} • {event.time}</p>
                         </div>
-                        <Badge variant={
-                          event.type === 'Reunión' ? 'default' : 
-                          event.type === 'Libre' ? 'secondary' : 'outline'
-                        }>
-                          {event.type}
-                        </Badge>
+                        <div className="flex items-center gap-2">
+                          <Badge variant={
+                            event.type === 'Reunión' ? 'default' : 
+                            event.type === 'Libre' ? 'secondary' : 'outline'
+                          }>
+                            {event.type}
+                          </Badge>
+                          <Button variant="ghost" size="sm">
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                        </div>
                       </div>
                     ))}
                   </CardContent>
                 </Card>
               </div>
             </div>
+
+            <EventModal 
+              open={isEventModalOpen} 
+              onOpenChange={setIsEventModalOpen}
+            />
           </div>
         );
 
@@ -466,15 +507,27 @@ const Dashboard = () => {
                   <CardDescription>Gestiona tus solicitudes de RR.HH.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button 
+                    className="w-full justify-start" 
+                    variant="outline"
+                    onClick={() => setIsVacationModalOpen(true)}
+                  >
                     <Calendar className="w-4 h-4 mr-2" />
                     Solicitar Vacaciones
                   </Button>
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button 
+                    className="w-full justify-start" 
+                    variant="outline"
+                    onClick={() => toast({ title: "Funcionalidad próximamente", description: "Esta función estará disponible pronto" })}
+                  >
                     <FileText className="w-4 h-4 mr-2" />
                     Certificado Laboral
                   </Button>
-                  <Button className="w-full justify-start" variant="outline">
+                  <Button 
+                    className="w-full justify-start" 
+                    variant="outline"
+                    onClick={() => toast({ title: "Funcionalidad próximamente", description: "Esta función estará disponible pronto" })}
+                  >
                     <Clock className="w-4 h-4 mr-2" />
                     Reporte de Horas
                   </Button>
@@ -488,33 +541,49 @@ const Dashboard = () => {
                 </CardHeader>
                 <CardContent className="space-y-4">
                   {[
-                    { type: "Vacaciones", status: "Aprobado", date: "01 Mar" },
-                    { type: "Certificado", status: "Pendiente", date: "05 Mar" },
-                    { type: "Horas extra", status: "Rechazado", date: "10 Mar" }
-                  ].map((item, i) => (
-                    <div key={i} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    { type: "Vacaciones", status: "Aprobado", date: "01 Mar", id: 1 },
+                    { type: "Certificado", status: "Pendiente", date: "05 Mar", id: 2 },
+                    { type: "Horas extra", status: "Rechazado", date: "10 Mar", id: 3 }
+                  ].map((item) => (
+                    <div key={item.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
                       <div>
                         <p className="font-medium">{item.type}</p>
                         <p className="text-sm text-gray-600">{item.date}</p>
                       </div>
-                      <Badge variant={
-                        item.status === 'Aprobado' ? 'default' : 
-                        item.status === 'Pendiente' ? 'secondary' : 'destructive'
-                      }>
-                        {item.status}
-                      </Badge>
+                      <div className="flex items-center gap-2">
+                        <Badge variant={
+                          item.status === 'Aprobado' ? 'default' : 
+                          item.status === 'Pendiente' ? 'secondary' : 'destructive'
+                        }>
+                          {item.status}
+                        </Badge>
+                        <Button variant="ghost" size="sm">
+                          <Eye className="w-4 h-4" />
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </CardContent>
               </Card>
             </div>
+
+            <VacationRequestModal 
+              open={isVacationModalOpen} 
+              onOpenChange={setIsVacationModalOpen}
+            />
           </div>
         );
 
       case 'beneficios':
         return (
           <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">Beneficios</h1>
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <h1 className="text-3xl font-bold text-gray-900">Beneficios</h1>
+              <Button onClick={() => toast({ title: "Solicitar beneficio", description: "Contacta a RR.HH. para activar nuevos beneficios" })}>
+                <Plus className="w-4 h-4 mr-2" />
+                Solicitar Beneficio
+              </Button>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {[
@@ -522,56 +591,70 @@ const Dashboard = () => {
                   title: "Seguro Médico", 
                   description: "Cobertura médica completa",
                   status: "Activo",
-                  icon: "🏥"
+                  icon: "🏥",
+                  value: "$500/mes"
                 },
                 { 
                   title: "Seguro Dental", 
                   description: "Atención dental preventiva",
                   status: "Activo",
-                  icon: "🦷"
+                  icon: "🦷",
+                  value: "$100/mes"
                 },
                 { 
                   title: "Gym Corporativo", 
                   description: "Acceso a gimnasio empresarial",
                   status: "Activo",
-                  icon: "🏋️"
+                  icon: "🏋️",
+                  value: "Gratis"
                 },
                 { 
                   title: "Descuentos", 
                   description: "Descuentos en tiendas afiliadas",
                   status: "Disponible",
-                  icon: "🛍️"
+                  icon: "🛍️",
+                  value: "10-30%"
                 },
                 { 
                   title: "Capacitaciones", 
                   description: "Cursos y certificaciones",
                   status: "Disponible",
-                  icon: "📚"
+                  icon: "📚",
+                  value: "$1000/año"
                 },
                 { 
                   title: "Transporte", 
                   description: "Subsidio de transporte",
                   status: "Activo",
-                  icon: "🚌"
+                  icon: "🚌",
+                  value: "$200/mes"
                 }
               ].map((benefit, i) => (
                 <Card key={i} className="hover:shadow-lg transition-shadow">
                   <CardHeader>
                     <div className="flex items-center gap-3">
                       <span className="text-2xl">{benefit.icon}</span>
-                      <div>
+                      <div className="flex-1">
                         <CardTitle className="text-lg">{benefit.title}</CardTitle>
-                        <Badge variant={benefit.status === 'Activo' ? 'default' : 'secondary'}>
-                          {benefit.status}
-                        </Badge>
+                        <p className="text-sm text-gray-600">{benefit.value}</p>
                       </div>
+                      <Badge variant={benefit.status === 'Activo' ? 'default' : 'secondary'}>
+                        {benefit.status}
+                      </Badge>
                     </div>
                   </CardHeader>
                   <CardContent>
                     <p className="text-gray-600 mb-4">{benefit.description}</p>
-                    <Button variant="outline" className="w-full">
-                      Ver Detalles
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button variant="outline" className="flex-1" size="sm">
+                        Ver Detalles
+                      </Button>
+                      {benefit.status === 'Disponible' && (
+                        <Button size="sm" className="flex-1">
+                          Activar
+                        </Button>
+                      )}
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -582,34 +665,93 @@ const Dashboard = () => {
       case 'perfil':
         return (
           <div className="space-y-6">
-            <h1 className="text-3xl font-bold text-gray-900">Mi Perfil</h1>
+            <div className="flex justify-between items-center">
+              <h1 className="text-3xl font-bold text-gray-900">Mi Perfil</h1>
+              <Button 
+                onClick={() => setIsEditingProfile(!isEditingProfile)}
+                variant={isEditingProfile ? "outline" : "default"}
+              >
+                {isEditingProfile ? "Cancelar" : "Editar Perfil"}
+              </Button>
+            </div>
             
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               <Card className="lg:col-span-2">
                 <CardHeader>
                   <CardTitle>Información Personal</CardTitle>
-                  <CardDescription>Actualiza tus datos personales</CardDescription>
+                  <CardDescription>
+                    {isEditingProfile ? "Actualiza tus datos personales" : "Tu información personal"}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="text-sm font-medium text-gray-600">Nombre Completo</label>
-                      <p className="text-lg font-medium">{userName}</p>
+                  {isEditingProfile ? (
+                    <form className="space-y-4">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                          <Label htmlFor="name">Nombre Completo</Label>
+                          <Input id="name" defaultValue={userName} />
+                        </div>
+                        <div>
+                          <Label htmlFor="email">Email</Label>
+                          <Input id="email" type="email" defaultValue={userEmail} />
+                        </div>
+                        <div>
+                          <Label htmlFor="phone">Teléfono</Label>
+                          <Input id="phone" placeholder="+1 234 567 8900" />
+                        </div>
+                        <div>
+                          <Label htmlFor="department">Departamento</Label>
+                          <Input id="department" defaultValue="Tecnología" />
+                        </div>
+                        <div>
+                          <Label htmlFor="position">Cargo</Label>
+                          <Input id="position" defaultValue="Desarrollador Senior" />
+                        </div>
+                        <div>
+                          <Label htmlFor="startDate">Fecha de Ingreso</Label>
+                          <Input id="startDate" type="date" defaultValue="2023-01-15" />
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button type="submit" onClick={() => {
+                          toast({ title: "Perfil actualizado", description: "Tus datos han sido guardados exitosamente" });
+                          setIsEditingProfile(false);
+                        }}>
+                          Guardar Cambios
+                        </Button>
+                        <Button type="button" variant="outline" onClick={() => setIsEditingProfile(false)}>
+                          Cancelar
+                        </Button>
+                      </div>
+                    </form>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Nombre Completo</label>
+                        <p className="text-lg font-medium">{userName}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Email</label>
+                        <p className="text-lg font-medium">{userEmail}</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Teléfono</label>
+                        <p className="text-lg font-medium">+1 234 567 8900</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Departamento</label>
+                        <p className="text-lg font-medium">Tecnología</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Cargo</label>
+                        <p className="text-lg font-medium">Desarrollador Senior</p>
+                      </div>
+                      <div>
+                        <label className="text-sm font-medium text-gray-600">Fecha de Ingreso</label>
+                        <p className="text-lg font-medium">15 de Enero, 2023</p>
+                      </div>
                     </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-600">Email</label>
-                      <p className="text-lg font-medium">{userEmail}</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-600">Departamento</label>
-                      <p className="text-lg font-medium">Tecnología</p>
-                    </div>
-                    <div>
-                      <label className="text-sm font-medium text-gray-600">Cargo</label>
-                      <p className="text-lg font-medium">Desarrollador Senior</p>
-                    </div>
-                  </div>
-                  <Button className="mt-6">Editar Perfil</Button>
+                  )}
                 </CardContent>
               </Card>
 
@@ -625,6 +767,10 @@ const Dashboard = () => {
                   <Button variant="outline" className="w-full justify-start">
                     <Settings className="w-4 h-4 mr-2" />
                     Preferencias
+                  </Button>
+                  <Button variant="outline" className="w-full justify-start">
+                    <FileText className="w-4 h-4 mr-2" />
+                    Descargar Datos
                   </Button>
                   <Button variant="outline" className="w-full justify-start text-red-600 hover:text-red-700">
                     <LogOut className="w-4 h-4 mr-2" />
