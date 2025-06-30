@@ -8,6 +8,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { 
   Users, 
   FileText, 
@@ -20,11 +22,18 @@ import {
   CheckCircle, 
   AlertCircle,
   Edit,
-  Plus
+  Plus,
+  UserPlus,
+  Building,
+  Heart,
+  DollarSign,
+  PlusCircle
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
+import { format } from 'date-fns';
 import VacationRequestModal from '@/components/VacationRequestModal';
 import DocumentUploadModal from '@/components/DocumentUploadModal';
+import EventModal from '@/components/EventModal';
 
 const Dashboard = () => {
   const [isVacationModalOpen, setIsVacationModalOpen] = useState(false);
@@ -46,7 +55,7 @@ const Dashboard = () => {
         </div>
       </div>
 
-      <Tabs defaultvalue="perfil" className="w-full">
+      <Tabs defaultValue="perfil" className="w-full">
         <TabsList>
           <TabsTrigger value="perfil">Perfil</TabsTrigger>
           <TabsTrigger value="documentos">Documentos</TabsTrigger>
@@ -156,6 +165,7 @@ const Dashboard = () => {
 
       <VacationRequestModal open={isVacationModalOpen} onOpenChange={setIsVacationModalOpen} />
       <DocumentUploadModal open={isDocumentModalOpen} onOpenChange={setIsDocumentModalOpen} />
+      <EventModal />
     </div>
   );
 };
