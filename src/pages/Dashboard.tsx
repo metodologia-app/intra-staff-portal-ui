@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -17,7 +16,12 @@ import {
   Menu,
   X,
   Clock,
-  MapPin
+  MapPin,
+  Download,
+  Eye,
+  CalendarDays,
+  Plus,
+  Search
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -176,6 +180,276 @@ const Dashboard = () => {
                   ))}
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        );
+
+      case 'documentos':
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <h1 className="text-3xl font-bold text-gray-900">Documentos</h1>
+              <Button>
+                <Plus className="w-4 h-4 mr-2" />
+                Subir Documento
+              </Button>
+            </div>
+            
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              <Card className="lg:col-span-1">
+                <CardHeader>
+                  <CardTitle className="text-lg">Filtros</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600 mb-2 block">Categoría</label>
+                    <select className="w-full p-2 border rounded-lg">
+                      <option>Todos</option>
+                      <option>Contratos</option>
+                      <option>Certificados</option>
+                      <option>Políticas</option>
+                      <option>Manuales</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="text-sm font-medium text-gray-600 mb-2 block">Estado</label>
+                    <select className="w-full p-2 border rounded-lg">
+                      <option>Todos</option>
+                      <option>Activo</option>
+                      <option>Vencido</option>
+                      <option>Pendiente</option>
+                    </select>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="lg:col-span-3 space-y-4">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Buscar documentos..."
+                    className="w-full pl-10 pr-4 py-2 border rounded-lg"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 gap-4">
+                  {[
+                    {
+                      name: "Contrato de Trabajo",
+                      type: "PDF",
+                      size: "2.4 MB",
+                      date: "15 Mar 2024",
+                      status: "Activo",
+                      category: "Contratos"
+                    },
+                    {
+                      name: "Certificado Médico",
+                      type: "PDF", 
+                      size: "1.2 MB",
+                      date: "10 Mar 2024",
+                      status: "Válido",
+                      category: "Certificados"
+                    },
+                    {
+                      name: "Manual del Empleado",
+                      type: "PDF",
+                      size: "5.8 MB", 
+                      date: "01 Mar 2024",
+                      status: "Actualizado",
+                      category: "Manuales"
+                    },
+                    {
+                      name: "Política de Privacidad",
+                      type: "PDF",
+                      size: "800 KB",
+                      date: "28 Feb 2024", 
+                      status: "Vigente",
+                      category: "Políticas"
+                    },
+                    {
+                      name: "Evaluación Anual 2023",
+                      type: "PDF",
+                      size: "1.5 MB",
+                      date: "20 Feb 2024",
+                      status: "Completado", 
+                      category: "Evaluaciones"
+                    }
+                  ].map((doc, i) => (
+                    <Card key={i} className="hover:shadow-md transition-shadow">
+                      <CardContent className="p-4">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 bg-red-100 rounded-lg flex items-center justify-center">
+                              <FileText className="w-5 h-5 text-red-600" />
+                            </div>
+                            <div>
+                              <h3 className="font-medium text-gray-900">{doc.name}</h3>
+                              <div className="flex items-center gap-4 text-sm text-gray-500">
+                                <span>{doc.type} • {doc.size}</span>
+                                <span>{doc.date}</span>
+                                <Badge variant="secondary">{doc.category}</Badge>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <Badge variant={
+                              doc.status === 'Activo' || doc.status === 'Válido' || doc.status === 'Vigente' ? 'default' : 
+                              doc.status === 'Completado' || doc.status === 'Actualizado' ? 'secondary' : 'destructive'
+                            }>
+                              {doc.status}
+                            </Badge>
+                            <Button variant="outline" size="sm">
+                              <Eye className="w-4 h-4 mr-1" />
+                              Ver
+                            </Button>
+                            <Button variant="outline" size="sm">
+                              <Download className="w-4 h-4 mr-1" />
+                              Descargar
+                            </Button>
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+
+      case 'calendario':
+        return (
+          <div className="space-y-6">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <h1 className="text-3xl font-bold text-gray-900">Calendario</h1>
+              <Button>
+                <Plus className="w-4 h-4 mr-2" />
+                Nuevo Evento
+              </Button>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+              <Card className="lg:col-span-1">
+                <CardHeader>
+                  <CardTitle className="text-lg">Marzo 2024</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <div className="grid grid-cols-7 gap-1 text-center text-sm">
+                    {['L', 'M', 'X', 'J', 'V', 'S', 'D'].map(day => (
+                      <div key={day} className="p-2 font-medium text-gray-500">{day}</div>
+                    ))}
+                    {Array.from({length: 31}, (_, i) => (
+                      <div 
+                        key={i + 1} 
+                        className={`p-2 hover:bg-blue-50 rounded cursor-pointer ${
+                          i + 1 === 15 ? 'bg-blue-600 text-white' : 
+                          [10, 20, 25].includes(i + 1) ? 'bg-blue-100 text-blue-600' : ''
+                        }`}
+                      >
+                        {i + 1}
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="lg:col-span-3 space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Eventos de Hoy</CardTitle>
+                    <CardDescription>Viernes, 15 de Marzo 2024</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {[
+                      {
+                        time: "09:00 - 10:00",
+                        title: "Reunión de Equipo",
+                        type: "Reunión", 
+                        location: "Sala de Conferencias A",
+                        attendees: 8
+                      },
+                      {
+                        time: "14:00 - 15:30", 
+                        title: "Evaluación de Desempeño",
+                        type: "Evaluación",
+                        location: "Oficina de RR.HH.",
+                        attendees: 2
+                      },
+                      {
+                        time: "16:00 - 17:00",
+                        title: "Capacitación en Seguridad",
+                        type: "Capacitación",
+                        location: "Aula Virtual", 
+                        attendees: 25
+                      }
+                    ].map((event, i) => (
+                      <div key={i} className="flex items-center gap-4 p-4 bg-gray-50 rounded-lg">
+                        <div className="w-2 h-12 bg-blue-600 rounded"></div>
+                        <div className="flex-1">
+                          <div className="flex items-center justify-between">
+                            <h3 className="font-medium text-gray-900">{event.title}</h3>
+                            <Badge variant="outline">{event.type}</Badge>
+                          </div>
+                          <div className="flex items-center gap-4 text-sm text-gray-500 mt-1">
+                            <span className="flex items-center gap-1">
+                              <Clock className="w-4 h-4" />
+                              {event.time}
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <MapPin className="w-4 h-4" />
+                              {event.location}
+                            </span>
+                            <span>{event.attendees} participantes</span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Próximos Eventos</CardTitle>
+                    <CardDescription>Esta semana</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {[
+                      {
+                        date: "Lun 18 Mar",
+                        title: "Presentación de Proyecto",
+                        time: "10:00",
+                        type: "Presentación"
+                      },
+                      {
+                        date: "Mié 20 Mar", 
+                        title: "Día Libre por Cumpleaños",
+                        time: "Todo el día",
+                        type: "Libre"
+                      },
+                      {
+                        date: "Vie 22 Mar",
+                        title: "Reunión Mensual",
+                        time: "15:00",
+                        type: "Reunión"
+                      }
+                    ].map((event, i) => (
+                      <div key={i} className="flex items-center justify-between p-3 border rounded-lg">
+                        <div>
+                          <h4 className="font-medium">{event.title}</h4>
+                          <p className="text-sm text-gray-600">{event.date} • {event.time}</p>
+                        </div>
+                        <Badge variant={
+                          event.type === 'Reunión' ? 'default' : 
+                          event.type === 'Libre' ? 'secondary' : 'outline'
+                        }>
+                          {event.type}
+                        </Badge>
+                      </div>
+                    ))}
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         );

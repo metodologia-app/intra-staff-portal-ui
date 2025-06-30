@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Building2, ArrowLeft } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 
@@ -14,9 +13,8 @@ const Register = () => {
     firstName: '',
     lastName: '',
     email: '',
-    department: '',
-    position: '',
     employeeId: '',
+    position: '',
     password: '',
     confirmPassword: ''
   });
@@ -56,7 +54,7 @@ const Register = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-2xl">
+      <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <button
             onClick={() => navigate('/login')}
@@ -81,7 +79,7 @@ const Register = () => {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleRegister} className="space-y-6">
+            <form onSubmit={handleRegister} className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="firstName">Nombre</Label>
@@ -106,7 +104,7 @@ const Register = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email">Correo Electrónico Corporativo</Label>
+                <Label htmlFor="email">Correo Electrónico</Label>
                 <Input
                   id="email"
                   type="email"
@@ -117,33 +115,15 @@ const Register = () => {
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="department">Departamento</Label>
-                  <Select onValueChange={(value) => handleInputChange('department', value)}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Selecciona departamento" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="rrhh">Recursos Humanos</SelectItem>
-                      <SelectItem value="it">Tecnología</SelectItem>
-                      <SelectItem value="marketing">Marketing</SelectItem>
-                      <SelectItem value="ventas">Ventas</SelectItem>
-                      <SelectItem value="finanzas">Finanzas</SelectItem>
-                      <SelectItem value="operaciones">Operaciones</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div className="space-y-2">
-                  <Label htmlFor="employeeId">ID de Empleado</Label>
-                  <Input
-                    id="employeeId"
-                    placeholder="EMP001"
-                    value={formData.employeeId}
-                    onChange={(e) => handleInputChange('employeeId', e.target.value)}
-                    required
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="employeeId">ID de Empleado</Label>
+                <Input
+                  id="employeeId"
+                  placeholder="EMP001"
+                  value={formData.employeeId}
+                  onChange={(e) => handleInputChange('employeeId', e.target.value)}
+                  required
+                />
               </div>
 
               <div className="space-y-2">
