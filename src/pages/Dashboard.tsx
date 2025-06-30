@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -38,6 +39,7 @@ import EventModal from '@/components/EventModal';
 const Dashboard = () => {
   const [isVacationModalOpen, setIsVacationModalOpen] = useState(false);
   const [isDocumentModalOpen, setIsDocumentModalOpen] = useState(false);
+  const [isEventModalOpen, setIsEventModalOpen] = useState(false);
 
   return (
     <div className="container mx-auto py-10">
@@ -165,7 +167,7 @@ const Dashboard = () => {
 
       <VacationRequestModal open={isVacationModalOpen} onOpenChange={setIsVacationModalOpen} />
       <DocumentUploadModal open={isDocumentModalOpen} onOpenChange={setIsDocumentModalOpen} />
-      <EventModal />
+      <EventModal open={isEventModalOpen} onOpenChange={setIsEventModalOpen} />
     </div>
   );
 };
